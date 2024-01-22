@@ -1,0 +1,20 @@
+[
+{
+  "directory": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/build",
+  "command": "C:\\MinGW\\bin\\g++.exe    -O3 -flto -fprofile-generate -flto -march=native -o CMakeFiles\\slime_alg_exe.dir\\CALL-ALG.cpp.obj -c C:\\Users\\schmelzl\\Code\\07-12-cpp-manual-algorithm\\CALL-ALG.cpp",
+  "file": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/CALL-ALG.cpp",
+  "output": "CMakeFiles/slime_alg_exe.dir/CALL-ALG.cpp.obj"
+},
+{
+  "directory": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/build",
+  "command": "C:\\MinGW\\bin\\g++.exe    -O3 -flto -fprofile-generate -flto -march=native -o CMakeFiles\\slime_alg_exe.dir\\main_alg.cpp.obj -c C:\\Users\\schmelzl\\Code\\07-12-cpp-manual-algorithm\\main_alg.cpp",
+  "file": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/main_alg.cpp",
+  "output": "CMakeFiles/slime_alg_exe.dir/main_alg.cpp.obj"
+},
+{
+  "directory": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/build",
+  "command": "C:\\MinGW\\bin\\g++.exe    -O3 -flto -fprofile-generate -flto -march=native -o CMakeFiles\\slime_alg_exe.dir\\F00.cpp.obj -c C:\\Users\\schmelzl\\Code\\07-12-cpp-manual-algorithm\\F00.cpp",
+  "file": "C:/Users/schmelzl/Code/07-12-cpp-manual-algorithm/F00.cpp",
+  "output": "CMakeFiles/slime_alg_exe.dir/F00.cpp.obj"
+}
+]
