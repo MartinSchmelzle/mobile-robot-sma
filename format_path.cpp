@@ -1,8 +1,6 @@
 #include "custom_datatypes.h"
 
-using xycirc = std::vector<std::vector<double>>;
-path_struct format_path(SMAsol_struct SMAsol,model_struct *model,xycirc xCircle, 
-xycirc yCircle,std::array<std::array<double,2>,4> centerPoints)
+path_struct format_path(SMAsol_struct* SMAsol,model_struct *model,std::array<std::array<double,2>,4> centerPoints)
 {
   path_struct path; 
   std::array<double,2> startPoint = {model->xs, model->ys};
@@ -14,20 +12,22 @@ xycirc yCircle,std::array<std::array<double,2>,4> centerPoints)
   std::array<double,4> arc_centerpoints_x;
   std::array<double,4> arc_centerpoints_y;
   std::array<int,4> arc_counterclockwise;
+  std::array<double, 4> arc_radii;
 
   //write guide points into path
   for(int i=0;i<10;i++){
-  path.XS[i]=SMAsol.XS[i];
-  path.YS[i]=SMAsol.YS[i];}
+  path.XS[i]=SMAsol->XS[i];
+  path.YS[i]=SMAsol->YS[i];}
   //get xCircle and yCircle into path
-  for(int i=0; i<std::size(xCircle);i++)
+  for(int i=0; i<4;i++)
   {
-    arc_startpoints_x[i] = xCircle[i][0];
-    arc_startpoints_y[i] = yCircle[i][0];
-    arc_endpoints_x[i] = xCircle[i].back();
-    arc_endpoints_y[i] = yCircle[i].back();
+    arc_startpoints_x[i] = SMAsol->internalpath.arc_startpoints_x[i];
+    arc_startpoints_y[i] = SMAsol->internalpath.arc_startpoints_y[i];
+    arc_endpoints_x[i] = SMAsol->internalpath.arc_endpoints_x[i];
+    arc_endpoints_y[i] = SMAsol->internalpath.arc_endpoints_y[i];
     arc_centerpoints_x[i] = centerPoints[i][0];
     arc_centerpoints_y[i] = centerPoints[i][1];
+    arc_radii[i]=SMAsol->internalpath.r[i];
   }
 
 
@@ -73,6 +73,7 @@ xycirc yCircle,std::array<std::array<double,2>,4> centerPoints)
   else{arc_counterclockwise[i]=0;}
 
   //Account for angles above 180°
+  //* we assume angle<180° in other parts of the code
   if(anglechecker<0){arc_counterclockwise[i]*=-1;}
   }
   //debugging stuff
@@ -93,7 +94,7 @@ xycirc yCircle,std::array<std::array<double,2>,4> centerPoints)
     path.arc_center_points_x[i]=arc_centerpoints_x[i];
     path.arc_center_points_y[i]=arc_centerpoints_y[i];
     path.arc_counterclockwise[i]=arc_counterclockwise[i];
-  
+    path.arc_radii[i]=arc_radii[i];
   }
   return path;
 }

@@ -7,25 +7,32 @@
 #include <cmath>
 #include "slimemould_func_prototypes.h"
 #include <cstdint>
+
+//sets all entries of a given C-type array to 0
+//void setArrayToNaN(double* array, size_t size) {
+//    for (size_t i = 0; i < size; ++i) {
+//        array[i] = std::nan("");
+//    }
+//}
+void setArrayTo0(float* array, const size_t size) {
+    for (size_t i = 0; i < size; ++i) {
+        array[i] = 0;//std::nan("");
+    }
+}
+
 //This function does some coordinate transformations.
 //todo: Change how SA and EA are processed => The angles go clockwise, but should go counterclockwise => 90° and 270° are reversed
-std::array<double,8> getPointstoXY(double x[6],const model_struct* model)
+std::array<double,8> getPointstoXY(const double x[6],const model_struct* model)
 {
   double xx[4],yy[4];
- double model_SA=model->SA;
- double model_EA=model->EA;
- double model_xs=model->xs;
- double model_ys=model->ys;
- double model_xt=model->xt;
- double model_yt=model->yt;
-  double RA_tmp,RB_tmp,a,absxk,alpha,beta,d,scale,t,v_rotatedA_idx_0,v_rotatedB_idx_0,y;
+  double alpha, beta, RA_tmp,a,absxk,d,scale,t,v_rotatedA_idx_0,v_rotatedB_idx_0,y;
 
-  alpha = 0.017453292519943295 * model_SA; 
-  beta = 0.017453292519943295 * model_EA;
+  alpha = 0.017453292519943295 * model->SA; 
+  beta = 0.017453292519943295 * model->EA;
   //  Rotationsmatrix
   RA_tmp = std::sin(alpha);
   alpha = std::cos(alpha);
-  RB_tmp = std::sin(beta);
+  const double RB_tmp = std::sin(beta);
   beta = std::cos(beta);
   //  Einheitsvektor vor der Drehung
   //  Berechnung des Einheitsvektors nach der Drehung
@@ -77,33 +84,35 @@ std::array<double,8> getPointstoXY(double x[6],const model_struct* model)
   }
   RA_tmp = scale * std::sqrt(RA_tmp);
   v_rotatedB_idx_0 = beta * v_rotatedB_idx_0 / RA_tmp;
-  xx[0] = model_xs + v_rotatedA_idx_0;
-  xx[3] = model_xt + v_rotatedB_idx_0;
-  yy[0] = model_ys + a * d / y;
+  xx[0] = model->xs + v_rotatedA_idx_0;
+  xx[3] = model->xt + v_rotatedB_idx_0;
+  yy[0] = model->ys + a * d / y;
   xx[1] = x[1];
   yy[1] = x[2];
   xx[2] = x[3];
   yy[2] = x[4];
-  yy[3] = model_yt + beta * alpha / RA_tmp;
+  yy[3] = model->yt + beta * alpha / RA_tmp;
   std::array<double,8> returnvalue = {xx[0],xx[1],xx[2],xx[3],yy[0],yy[1],yy[2],yy[3]};
   return returnvalue;
 }
 
 //pushes numbers in a fixed-size array to the left, deleting a number
 //dependency for checkPoints
-void push_to_left(std::array<double, 10> &arr, int index) {
+void push_to_left(std::array<double, 10> &arr, const int index) {
     for (int i = index; i < arr.size() - 1; ++i) {
         arr[i] = arr[i + 1];
     }
 }
 
-void push_to_left(std::array<double, 9> &arr, int index) {
+void push_to_left(std::array<double, 9> &arr,const int index) {
     for (int i = index; i < arr.size() - 1; ++i) {
         arr[i] = arr[i + 1];
     }
 }
 
 //checks if guide points are in order (if they are too close to one another, if they are in a straight line, if they lead nowhere)
+// Since MATLAB Coder forced me to use fixed size arrays, this function features a weird, C-like programming style.
+//todo: Replace fixed-size arrays with vectors
 void checkPoints(const double XS[6], const double YS[6], std::array<double, 10> &XS_out,
                  std::array<double, 10> &YS_out, double &startTurn, double &endTurn, uint8_t &k) {
     std::array<double, 6> temp = {XS[5], YS[5]};
@@ -173,8 +182,8 @@ void checkPoints(const double XS[6], const double YS[6], std::array<double, 10> 
     }
 }
 
-//dependencies for initialization
-void getAngRad(std::array<double, 10> XS, std::array<double, 10> YS, int i, double g_s, double& g_a, double& g_r) {
+//needed for initialization; this function takes in s (distance from straight line added to arc) and computes r (radius) and a (some kind of angle)
+void getAngRad(const std::array<double, 10> XS,const std::array<double, 10> YS,const int i,const double g_s, double& g_a, double& g_r) {
     // Vektoren AB und BC
     double vectorBA[2] = { -(XS[i + 1] - XS[i]), -(YS[i + 1] - YS[i]) };
     double vectorBC[2] = { XS[i + 2] - XS[i + 1], YS[i + 2] - YS[i + 1] };
@@ -189,25 +198,16 @@ void getAngRad(std::array<double, 10> XS, std::array<double, 10> YS, int i, doub
     
     g_a = std::acos(dotProduct / (lengthBA * lengthBC));
 
- //todo: deal with this edge case => g_r = 0 leads to problems further down in optimizationRad.
-    // if (std::abs(g_a - 180) < 1e-4) {
-    //     g_r = 0;
-    // } else {
-        // r bestimmen
-
-        //std::cout<<"vectorBC:"<<vectorBC[0]<<", "<<vectorBC[1]<<std::endl;
-        //std::cout<<"g_a:"<<g_a<<std::endl;
-        g_r = g_s * std::tan(g_a / 2.0);
-        g_a *= 180 / 3.14159;
-        //add a few asserts to prevent g_r==0
-        assert(g_s!=0);
-        assert(std::tan(g_a)!=0);
-        assert(g_r>=0);
-   // }
+    g_r = g_s * std::tan(g_a / 2.0);
+    g_a *= 180 / 3.14159;
+    //add a few asserts to prevent g_r==0
+    assert(g_s!=0);
+    assert(std::tan(g_a)!=0);
+    assert(g_r>=0);
 }
 
 //version without alpha and beta => called by initialization
-void findMid(std::array<double, 10> XS, std::array<double, 10> YS, double dis[], double g_r, double g_s, int i, double* m0, double* m1) {
+void findMid(const std::array<double, 10> XS,const std::array<double, 10> YS, double dis[],const double g_r,const double g_s,const int i, double* m0, double* m1) {
     // Mittelpunkt finden
     
     double vecAB[2] = {XS[i + 1] - XS[i], YS[i + 1] - YS[i]};
@@ -247,15 +247,9 @@ void findMid(std::array<double, 10> XS, std::array<double, 10> YS, double dis[],
         }
     }
 }
-//dependency for findMidAlphaBeta; checks whether alpha or beta fulfills all required geometric conditions
-bool checkalpha(double alphacandidate,double vecAB[2]){
-    double len = sqrt(vecAB[0]*vecAB[0] + vecAB[1]*vecAB[1]);
-  bool alphacorrect = cos(alphacandidate) - vecAB[1]/len + sin(alphacandidate) - vecAB[0] / len < 1e-3; //if these conditions satisfied: alpha correct
-  return alphacorrect;
-}
 
-//includes calculation of alpha and beta => called by optimizationRad
-std::array<double,2> findMidAlphaBeta(std::array<double, 10> XS, std::array<double, 10> YS, std::vector<double> dis, double g_r, double g_s, int i, 
+//includes calculation of start and end point => called by optimizationRad
+std::array<double,2> findMidAlphaBeta(const std::array<double, 10> XS,const std::array<double, 10> YS,const std::vector<double> dis, const double g_r,const double g_s,const int i, 
 std::array<double,2> &startpoint, std::array<double,2> &endpoint) {
    // Mittelpunkt finden
    double middle0, middle1;
@@ -263,8 +257,6 @@ std::array<double,2> &startpoint, std::array<double,2> &endpoint) {
    double vecAB[2] = {XS[i + 1] - XS[i], YS[i + 1] - YS[i]};
     double vecBC[2] = {XS[i + 2] - XS[i + 1], YS[i + 2] - YS[i + 1]};
    if (g_r == 0) {
-       //alpha = 0;
-       //beta = 0;
        middle0 = XS[i] + (dis[i] - g_s) / dis[i] * vecAB[0];
        middle1 = YS[i] + (dis[i] - g_s) / dis[i] * vecAB[1];
    } else {
@@ -297,158 +289,58 @@ std::array<double,2> &startpoint, std::array<double,2> &endpoint) {
            middle0 += 2 * ax;
            middle1 += 2 * ay;
        }
-  /* 
-       double Vec[2];
-       // get angle of alpha to x axis
-       Vec[0] = -ax; Vec[1] = -ay;
-       alpha = acos(Vec[0] / (std::sqrt(ax * ax + ay * ay) * 1))*sign(Vec[1]);// earlier version: * std::signbit(b);
-       alpha = alpha /3.1415926 * 180;
-   
-       // get angle of beta to x axis
-       Vec[0] = -bx; Vec[1] = -by;
-       beta = acos(Vec[0] / (std::sqrt(bx * bx + by * by) * 1))*sign(Vec[1]);//earlier version: * std::signbit(d);
-       beta = beta /3.1415926 *180;*/
    }
-   //std::cout<<"arc number: "<<i<<", vecAB: "<<vecAB[0]<<","<<vecAB[1]<<", vecBC: "<<vecBC[0]<<", "<<vecBC[1]<<std::endl;
     //extensively tested; correct until here
     //calculate start and end point of arc
     double len = sqrt(vecAB[0]*vecAB[0]+vecAB[1]*vecAB[1]);
     vecAB[0]/=len;
     vecAB[1]/=len;
-    //double startpoint[2];
     len=sqrt(vecBC[0]*vecBC[0]+vecBC[1]*vecBC[1]);
     startpoint[0]=XS[i+1] -g_s*vecAB[0];
     startpoint[1]=YS[i+1] -g_s*vecAB[1];
     vecBC[0]/=len;
     vecBC[1]/=len;
-    //double endpoint[2];
     endpoint[0]=XS[i+1] +g_s*vecBC[0];
     endpoint[1]=YS[i+1] +g_s*vecBC[1];
-    //std::cout<<"vecBC: "<<vecBC[0]<<", "<<vecBC[1]<<std::endl;
-   
-    //calculate alpha
-    /*if(vecAB[0]>=0){ //positive in x axis
-        if(vecAB[1]>0 || vecAB==0){alpha =acos(abs(vecAB[1])/dis[i])*180/3.14159; assert(alpha>=0 && alpha<=90);} //positive in x and y
-        if(vecAB[1]<0){alpha = acos(abs(vecAB[1])/dis[i])*180/3.14159+90; assert(alpha>90 && alpha <=180);} //pos in x, neg in y
-    }
-    else{ //negative in x axis
-        if(vecAB[1]>0|| vecAB==0){alpha = 270-acos(abs(vecAB[1]/dis[i]))*180/3.14159; assert(alpha>=270 && alpha<=360);} //positive in x and y
-        if(vecAB[1]<0){alpha = 360-acos(abs(vecAB[1]/dis[i]))*180/3.14159; assert(alpha>180 && alpha <=270);} //pos in x, neg in y
-    }
-    //calculate beta
-    if(vecBC[0]>=0){ //positive in x axis
-        if(vecBC[1]>0 || vecBC==0){beta =acos(abs(vecBC[1])/dis[i+1])*180/3.14159; assert(beta>=0 && beta<=90);} //positive in x and y
-        if(vecBC[1]<0){beta = acos(abs(vecBC[1])/dis[i+1])*180/3.14159+90; assert(beta>90 && beta <=180);} //pos in x, neg in y
-    }
-    else{ //negative in x axis
-        if(vecBC[1]>0|| vecBC==0){beta = 270-acos(abs(vecBC[1]/dis[i+1]))*180/3.14159; assert(beta>=270 && beta<=360);} //positive in x and y
-        if(vecBC[1]<0){beta = 360-acos(abs(vecBC[1]/dis[i+1]))*180/3.14159; assert(beta>180 && beta <=270);} //pos in x, neg in y
-    }*/
   
   std::array<double,2> result = {middle0,middle1};
   return result;
 }
 
 //initialize arcs with radii
-void initialization(struct_internalpath* g, int k, std::array<double, 10> XS, std::array<double, 10> YS)
+void initialization(SMAsol_struct* sol,const int k)
 {
   double g_s[k-2],g_a[k-2],g_r[k-2],alpha[k-2],beta[k-2],m[2][k-2],dis[k-1];
   //get distances between guide points
   double di;
   for (int i = 0; i < k - 1; ++i) {
-    di = std::sqrt(std::pow(XS[i + 1] - XS[i], 2) + std::pow(YS[i + 1] - YS[i], 2));
+    di = std::sqrt(std::pow(sol->XS[i + 1] - sol->XS[i], 2) + std::pow(sol->YS[i + 1] - sol->YS[i], 2));
     dis[i] = di; //distances between guide points
   }
   //for-loop for initialization
   for(int i=0;i<k-2;i++)
   {
-    //if(i=k-2){g_s[i] = dis[i+1]*0.9;} //last arc should be as long as dis between guide point and end point
     g_s[i] = std::min(dis[i],dis[i+1])*0.25; //in MATLAB Code: 0.25 is called 'start'; amount of space on lines used for arcs
-    getAngRad(XS,YS,i,g_s[i],g_a[i],g_r[i]); //get angles and radii for a given g_s
-    findMid(XS,YS,dis,g_r[i],g_s[i],i,&m[0][i],&m[1][i]); //find middle point
-    g->a.push_back(g_a[i]); //write angles, sizes, center points, radii and distances into g
-    g->s.push_back(g_s[i]);
-    g->r.push_back(g_r[i]);
-    g->m.push_back({m[0][i],m[1][i]});
+    getAngRad(sol->XS,sol->YS,i,g_s[i],g_a[i],g_r[i]); //get angles and radii for a given g_s
+    findMid(sol->XS,sol->YS,dis,g_r[i],g_s[i],i,&m[0][i],&m[1][i]); //find middle point
+    sol->internalpath.a.push_back(g_a[i]); //write angles, sizes, center points, radii and distances into g
+    sol->internalpath.s.push_back(g_s[i]);
+    sol->internalpath.r.push_back(g_r[i]);
+    sol->internalpath.m.push_back({m[0][i],m[1][i]});
     assert(g_r[i]>0);
   }
-  for(int i=0;i<k-1;i++){g->dis.push_back(dis[i]);}
+  for(int i=0;i<k-1;i++){sol->internalpath.dis.push_back(dis[i]);}
 }
 
-//function for plotting arcs=> calculates points along arcs
-//returns xunit, yunit, a
-void circleRad(double x, double y, double r, double alpha, double beta,
-               std::vector<double>& xunit, std::vector<double>& yunit, double& a) {
-    //x,y: center point of current arc
-    //r: radius of current arc
-    //alpha, beta: angles at start, end
-    //xunit, yunit: xCircle, yCircle => points on arc
-    //a: angles of these points (I think)
-    if (alpha < 0) alpha += 360;
-    if (beta < 0) beta += 360;
-
-    alpha = alpha * 3.14159 / 180.0; // degtorad
-    beta = beta * 3.14159 / 180.0;
-
-    std::vector<double> th1, th2, th; //th1 and th2 go around the arc in two different directions. Out of the two, th is the shorter one
-
-    if (alpha < beta) {
-        for (double th = alpha; th <= beta; th += 3.14159 / 100) //fill up th1
-            th1.push_back(th);
-    } else {
-        for (double th = beta; th <= alpha; th += 3.14159 / 100)
-            th1.push_back(th);
-        std::reverse(th1.begin(), th1.end()); //flip array
-    }
-
-    if (th1.size() == 1) //arc smaller than pi/100
-        th1 = { alpha, beta };
-
-    if (alpha > beta) { //fill up th2
-        for (double th = alpha; th <= 2 * 3.14159; th += 3.14159 / 100)
-            th2.push_back(th);
-        for (double th = 3.14159 / 100; th <= beta; th += 3.14159 / 100)
-            th2.push_back(th);
-    } else {
-        for (double th = beta; th <= 2 * 3.14159; th += 3.14159 / 100)
-            th2.push_back(th);
-        for (double th = 3.14159 / 100; th <= alpha; th += 3.14159 / 100)
-            th2.push_back(th);
-        std::reverse(th2.begin(), th2.end());
-    }
-
-    if (th2.size() == 1) //if angle of arc <pi/100
-        th2 = { alpha, beta };
-
-    th = (th1.size() < th2.size()) ? th2 : th1;
-
-    for (double th_val : th) {
-        xunit.push_back(r * cos(th_val) + x);
-        yunit.push_back(r * sin(th_val) + y);
-    }
-    assert(th.size()>1); //make sure that th is filled with values to avoid segfault
-    a = std::abs(th.back() - th.front()) * 180.0 / 3.14159; // radtodeg conversion
-
-    if (a > 180)
-        a = 360 - a;
-}
-
-void optimizationRad(struct_internalpath* g, int k, std::array<double, 10> XS,
- std::array<double, 10> YS, std::vector<std::vector<double>>* xCirc, std::vector<std::vector<double>>* yCirc) 
+void optimizationRad(SMAsol_struct* sol,const int k) 
 {
-    std::vector<std::vector<double>> xCircle(k - 2); // Using vector instead of cell arrays
-    std::vector<std::vector<double>> yCircle(k - 2);
-    std::vector<double> degC(k - 2, 0.0);
-    std::vector<double> alpha(k-2),beta(k-2);
-    double it, temp, lb, ub; int j; double os;
-    lb=4;ub=9;
+    struct_internalpath* g = &(sol->internalpath);
+    double it, temp; int j; 
+    const float lb=4, ub=9;
 
     for (int i = 0; i < k - 2; i++) {
-        
         if (std::abs(g->r[i]) < lb) {
             j = 1;
-            os = g->s[i];
-            lb=4;ub=9; //lower, upper bounds
             
             if ((i == 0) && (g->dis[0] == std::min(g->dis[0], g->dis[1]))) {
                 it = 30;
@@ -463,50 +355,34 @@ void optimizationRad(struct_internalpath* g, int k, std::array<double, 10> XS,
             
             while ((std::abs(g->r[i]) < (lb - j * 0.1)) && (j <= it) && (g->s[i] < temp)) {
                 j++;
-                g->s[i] += os / 10;
+                g->s[i] += g->s[i] / 10;
                 g->s[i] = std::min(g->s[i], temp);
-                getAngRad(XS, YS, i, g->s[i], g->a[i], g->r[i]);
+                getAngRad(sol->XS, sol->YS, i, g->s[i], g->a[i], g->r[i]);
             }
         } else if (std::abs(g->r[i]) > ub) {
             it=10;
             while (std::abs(g->r[i]) > ub && j<it) {
                 j++;
                 g->s[i] -= g->s[i] / 5;
-                getAngRad(XS, YS, i, g->s[i], g->a[i], g->r[i]);
+                getAngRad(sol->XS, sol->YS, i, g->s[i], g->a[i], g->r[i]);
             }
         }
 
-
-        double alpha,beta;
         std::array<double,2> startpoint,endpoint;
-        std::array<double,2> mres = findMidAlphaBeta(XS, YS, g->dis, g->r[i], g->s[i], i,startpoint,endpoint); // Update center point
-        //g->alpha.push_back(alpha);
-        //g->beta.push_back(beta);
+        std::array<double,2> mres = findMidAlphaBeta(sol->XS, sol->YS, g->dis, g->r[i], g->s[i], i,startpoint,endpoint); // Update center point
         assert(g->r[i]>0);
-        //assert(!std::isnan(g->alpha[i]) && !std::isnan(g->beta[i]));
         g->m[i][0] = mres[0]; g->m[i][1] = mres[1]; //this should hopefully work since m is already initialized
-        xCircle[i].push_back(startpoint[0]);
-        yCircle[i].push_back(startpoint[1]);
-        xCircle[i].push_back(endpoint[0]);
-        yCircle[i].push_back(endpoint[1]);
+        g->arc_startpoints_x[i] = startpoint[0];
+        g->arc_startpoints_y[i] = startpoint[1];
+        g->arc_endpoints_x[i] = endpoint[0];
+        g->arc_endpoints_y[i] = endpoint[1];
      }
-
-    //for (int i = 0; i < k - 2; i++) {
-    //    circleRad(g->m[i][0], g->m[i][1], g->r[i], g->alpha[i], g->beta[i], xCircle[i], yCircle[i], degC[i]);
-    //}
-
-   // Update the fields of struct g
-   g->xCircle = xCircle;
-   g->yCircle = yCircle;
-   g->degC = degC;
-   *xCirc = xCircle;
-   *yCirc = yCircle;
 }
 //prints out a point
-void printpoint(point P){std::cout<<P[0]<<","<<P[1]<<"\n";}
+void printpoint(const point P){std::cout<<P[0]<<","<<P[1]<<"\n";}
 
 //since XS and YS have nan values in the back, I need a function that returns the last non-nan value
-double lastnonnan(std::array<double,10> XS)
+double lastnonnan(const std::array<double,10> XS)
 {
     double lastNonNaN;
     for (size_t i = XS.size(); i > 0; --i) {
@@ -518,29 +394,30 @@ double lastnonnan(std::array<double,10> XS)
     return lastNonNaN;
 }
 
-double discretize(struct_internalpath* g, SMAsol_struct* sol, int k, int n, std::array<double, 10> XS, std::array<double, 10> YS) 
+double discretize(SMAsol_struct* sol, const int k, const int n,const double distance_discrete) 
 {
     //todo:Make this an optional algorithm parameter
-    double distance_discrete = 0.1;
+    //const double distance_discrete = 0.2;
+    struct_internalpath* g=&(sol->internalpath);
     std::vector<double> xx,yy;
     double totalpathlength=0;
     //calculate points on arc; reuse function from processpath here
     for(int i=0;i<4;i++)
     {
         //setup
-        point startpoint = {g->xCircle[i][0],g->yCircle[i][0]};
-        point endpoint = {g->xCircle[i].back(),g->yCircle[i].back()};
+        point startpoint = {g->arc_startpoints_x[i],g->arc_startpoints_y[i]};
+        point endpoint = {g->arc_endpoints_x[i],g->arc_endpoints_y[i]};
         //Logic for appending the straight lines
         point lineVector;
         point runner;
         if(i==0)//first line: use XS(0) instead of endpoint; others: use endpoint from previous arc
         {
-            lineVector={startpoint[0]-XS[0],startpoint[1]-YS[0]};
-            runner={XS[0],YS[0]};}
+            lineVector={startpoint[0]-sol->XS[0],startpoint[1]-sol->YS[0]};
+            runner={sol->XS[0],sol->YS[0]};}
         else
         {
-            lineVector={startpoint[0]-g->xCircle[i-1].back(),startpoint[1]-g->yCircle[i-1].back()};
-            runner={g->xCircle[i-1].back(),g->yCircle[i-1].back()};}
+            lineVector={startpoint[0]-g->arc_endpoints_x[i-1],startpoint[1]-g->arc_endpoints_y[i-1]};
+            runner={g->arc_endpoints_x[i-1],g->arc_endpoints_y[i-1]};}
         //find vector of straight line
         double lineVectorLength = sqrt(lineVector[0]*lineVector[0] + lineVector[1]*lineVector[1]);
         totalpathlength+=lineVectorLength; //incrementally add up total path length
@@ -558,18 +435,13 @@ double discretize(struct_internalpath* g, SMAsol_struct* sol, int k, int n, std:
 
         //Logic for appending the arcs
         point centerpoint={g->m[i][0],g->m[i][1]};
-        //std::cout<<"start, end, center\n";
-        //printpoint(startpoint);
-        //printpoint(endpoint);
-        //printpoint(centerpoint);
-        //Logic for determining whether arc is clockwise or counterclockwise;
         //!angles below 180° are assumed
         point vecCenterStart={centerpoint[0]-startpoint[0],centerpoint[1]-startpoint[1]};
         point vecCenterEnd={centerpoint[0]-endpoint[0],centerpoint[1]-endpoint[1]};
         double cross=vecCenterStart[0]*vecCenterEnd[1]-vecCenterStart[1]*vecCenterEnd[0];
         if(cross<0){cross=1;}else if(cross>0){cross=-1;}
         double arcLength;
-        std::vector<point> arcpoints = calculatePointsOnArc(startpoint, centerpoint,endpoint, cross, distance_discrete,0,arcLength);
+        std::vector<point> arcpoints = calculatePointsOnArc_legacy(startpoint, centerpoint,endpoint, cross, distance_discrete,0,arcLength);
         totalpathlength+=arcLength;
         // write arc points into xx and yy
         for(int j=0;j<arcpoints.size();j++)
@@ -580,15 +452,13 @@ double discretize(struct_internalpath* g, SMAsol_struct* sol, int k, int n, std:
     }
 
     //last line from arc to endpoint
-    point endpoint = {g->xCircle[k-3].back(),g->yCircle[k-3].back()};
-    point lineVector={lastnonnan(XS)-endpoint[0],lastnonnan(YS)-endpoint[1]};
+    point endpoint = {g->arc_endpoints_x[k-3],g->arc_endpoints_y[k-3]};
+    point lineVector={lastnonnan(sol->XS)-endpoint[0],lastnonnan(sol->YS)-endpoint[1]};
     point runner = {endpoint[0],endpoint[1]};
     double lineVectorLength = sqrt(lineVector[0]*lineVector[0] + lineVector[1]*lineVector[1]);
     lineVector[0]/=lineVectorLength;
     lineVector[1]/=lineVectorLength; //create unit vector
     //runner follows straight line, entries are added to xx,yy
-    //std::cout<<"last line: line vector\n";
-    //printpoint(lineVector);
     int n_linepoints = floor(lineVectorLength/distance_discrete);
     for(int j=0;j<n_linepoints;j++)
     {
@@ -599,61 +469,45 @@ double discretize(struct_internalpath* g, SMAsol_struct* sol, int k, int n, std:
     }
 
     
-    if (!(xx.back() == lastnonnan(XS)) || !(yy.back() == lastnonnan(YS)))
+    if (!(xx.back() == lastnonnan(sol->XS)) || !(yy.back() == lastnonnan(sol->YS)))
     {
-        xx.push_back(lastnonnan(XS));
-        yy.push_back(lastnonnan(YS));
+        xx.push_back(lastnonnan(sol->XS));
+        yy.push_back(lastnonnan(sol->YS));
     }
 
-    //for debugging: print out points
-    //std::cout<<"xx, yy:\n";
-    //for(int i=0; i<xx.size();i++)
-    //{
-    //    std::cout<<"("<<xx[i]<<","<<yy[i]<<")\n";
-    //}
-    //todo: Handle exceptions or issue warnings if needed
-    //if (XS.size() == 2) {
-    //    std::array<std::vector<double>,2> temp;
-    //    temp = splitLin({XS[0],XS[1]}, {XS.back(),YS.back()}, n);
-    //    sol->xx=temp[0];sol->yy=temp[1];
-    //}
     sol->xx=xx;sol->yy=yy;
     return totalpathlength;
     }
 
 //get Violation score for rectangles
 //todo: While there are round edges in the map svg's corners, these are not implemented here yet
-double getViolationRect(struct_internalpath* g, std::vector<double> xobs, std::vector<double> yobs, std::vector<double> xwidth, std::vector<double> ywidth, int nobs, SMAsol_struct* sol, int k, int n,double tolerance) {
-    std::for_each(xwidth.begin(), xwidth.end(), [](double& val) { val *= 0.5; }); // modify each value in the two vectors
-    std::for_each(ywidth.begin(), ywidth.end(), [](double& val) { val *= 0.5; });
+double getViolationRect(const model_struct* model,const SMAsol_struct* sol,const int k) {
     int amount_points=sol->xx.size();
     int i=0;
     double x,y,obs_left,obs_right,obs_up,obs_down,obs_left_tol,obs_right_tol,obs_up_tol,obs_down_tol;
     double Violation=0;
-    double add_collision=100.0/amount_points;//100.0 is important, otherwise we are dividing integers by integers, which returns wrong results
+    const double add_collision=100.0/amount_points;//100.0 is important, otherwise we are dividing integers by integers, which returns wrong results
     bool collision_middle_side,collision_corner,collision_x,collision_y,coll_x_tol,coll_y_tol;
     while(i<amount_points) //Iterate over points generated in discretize
     {   
-        //std::cout<<"i="<<i<<",";
         x=sol->xx[i];
         y=sol->yy[i];
-        for(int j=0;j<nobs;j++) //Iterate over obstacles
+        for(int j=0;j<model->xwidth.size();j++) //Iterate over obstacles
         {
-            //std::cout<<"j="<<j<<", xobs: "<<xobs[j]<<"yobs: "<<yobs[j]<<"\n";
-            if(abs(xobs[j])<=10000000 && abs(yobs[j])<=10000000)//there was a bug before where
+            if(abs(model->xobs_rect[j])<=10000000 && abs(model->yobs_rect[j])<=10000000)//there was a bug before where
             {
             //check if there is overlap in x and y direction without tolerance
-            obs_left=xobs[j]-xwidth[j];
-            obs_right=xobs[j]+xwidth[j];
-            obs_up=yobs[j]+ywidth[j];
-            obs_down=yobs[j]-ywidth[j];
+            obs_left=model->xobs_rect[j]-0.5*model->xwidth[j];
+            obs_right=model->xobs_rect[j]+0.5*model->xwidth[j];
+            obs_up=model->yobs_rect[j]+0.5*model->ywidth[j];
+            obs_down=model->yobs_rect[j]-0.5*model->ywidth[j];
             collision_x=(x-obs_left>=0) && (x-obs_right<=0);
             collision_y=(y-obs_down>=0) && (y-obs_up<=0);
             //check if point is on one of the sides (area covered by the tolerance, but not the round corners)
-            obs_left_tol=obs_left-tolerance;
-            obs_right_tol=obs_right+tolerance;
-            obs_up_tol=obs_up+tolerance;
-            obs_down_tol=obs_down-tolerance;
+            obs_left_tol=obs_left-model->tolerance;
+            obs_right_tol=obs_right+model->tolerance;
+            obs_up_tol=obs_up+model->tolerance;
+            obs_down_tol=obs_down-model->tolerance;
             coll_x_tol=(x-obs_left_tol>=0) && (x-obs_right_tol<=0);
             coll_y_tol=(y-obs_down_tol>=0) && (y-obs_up_tol<=0);
             collision_middle_side= ((coll_x_tol&&collision_y) || (coll_y_tol&&collision_x));
@@ -665,12 +519,9 @@ double getViolationRect(struct_internalpath* g, std::vector<double> xobs, std::v
             } 
             else if(collision_corner) //if collision happened in one of the corners
             {
-                //std::cout<<"Collision in the corner\n";
                 point rounded_centerp;//center point of the rounded corner the point collides with
-                //std::cout<<"calculating sign value of "<<y-yobs[j]<<"\n";
-                int upper_lower=sign(y-yobs[j]);
-                int right_left=sign(x-xobs[j]);
-                //std::cout<<"upper_lower: "<<upper_lower<<";right_left: "<<right_left<<"\n";
+                int upper_lower=sign(y-model->yobs_rect[j]);
+                int right_left=sign(x-model->xobs_rect[j]);
                 //determine center point of rectangle corner
                 if(upper_lower==1 && right_left==1) //upper right corner
                 {rounded_centerp={obs_right,obs_up};}
@@ -681,7 +532,7 @@ double getViolationRect(struct_internalpath* g, std::vector<double> xobs, std::v
                 else if(upper_lower==-1&&right_left==-1)//lower left corner
                 {rounded_centerp={obs_left,obs_down};}
                 double dist[2]={x-rounded_centerp[0], y-rounded_centerp[1]}; //distances of point to center point of corner
-                if( sqrt(dist[0]*dist[0]+dist[1]*dist[1])<=tolerance ) //if distances small:point in circle => add Violation
+                if( sqrt(dist[0]*dist[0]+dist[1]*dist[1])<=model->tolerance ) //if distances small:point in circle => add Violation
                 {Violation=Violation+add_collision;}
             }
             }
@@ -692,7 +543,7 @@ double getViolationRect(struct_internalpath* g, std::vector<double> xobs, std::v
 }
 
 //getViolation for circles
-double getViolationCirc(struct_internalpath* g, std::vector<double> xobs, std::vector<double> yobs, std::vector<double> robs, int nobs, SMAsol_struct* sol, double tolerance) {
+double getViolationCircBoundary(const model_struct* model,const SMAsol_struct* sol) {
     int amount_points=sol->xx.size();
     int i=0;
     double Violation=0;
@@ -700,19 +551,25 @@ double getViolationCirc(struct_internalpath* g, std::vector<double> xobs, std::v
     bool collision;
     while(i<amount_points)
     {
-        for(int j=0;j<nobs;j++) //Iterate over obstacles
+        for(int j=0;j<model->robs_circ.size();j++) //Iterate over obstacles
         {
-            double dist[2] ={sol->xx[i]-xobs[j],sol->yy[i]-yobs[j]};
-            collision= dist[0]*dist[0] + dist[1]*dist[1]<=(robs[j]+tolerance)*(robs[j]+tolerance);
+            double dist[2] ={sol->xx[i]-model->xobs_circ[j],sol->yy[i]-model->yobs_circ[j]};
+            collision= dist[0]*dist[0] + dist[1]*dist[1]<=(model->robs_circ[j]+model->tolerance)*(model->robs_circ[j]+model->tolerance);
             if(collision){Violation=Violation+add_collision;};
         }
         i++;
+
+        //while this has nothing to do with circles, we can also check boundary violations here
+        double ub = model->ub-model->tolerance;
+        double lb = model->lb + model->tolerance;
+        collision = sol->xx[i]>ub || sol->yy[i]<lb;
+        if(collision){Violation=Violation+add_collision;};
     }
     return Violation;
 }
 
 //Print out current values for XS and YS
-void printxsys(std::array<double, 10> XS, std::array<double, 10> YS){
+void printxsys(const std::array<double, 10> XS, const std::array<double, 10> YS){
   std::cout<<"XS, YS: "<<std::endl;
   for(int i=0;i<10;i++){
     std::cout<<XS[i]<<", "<<YS[i]<<std::endl;
@@ -721,7 +578,7 @@ void printxsys(std::array<double, 10> XS, std::array<double, 10> YS){
 }
 
 // Function to check if a point (px, py) is inside a rotated rectangle
-bool pointInRotatedRectangle(double rectX, double rectY, double rectWidth, double rectHeight, double rotationAngle, double px, double py) {
+bool pointInRotatedRectangle(const double rectX, const double rectY, const double rectWidth, const double rectHeight, double rotationAngle, const double px, const double py) {
     // Convert the point coordinates to local coordinates of the rotated rectangle
     rotationAngle*=3.1415926/180;
     double localX = cos(-rotationAngle) * (px - rectX) - sin(-rotationAngle) * (py - rectY);
@@ -733,12 +590,12 @@ bool pointInRotatedRectangle(double rectX, double rectY, double rectWidth, doubl
 }
 
 //get Violation Score for Charging Station
-double getViolationChargingStation(struct_internalpath* g, SMAsol_struct* sol, const model_struct* model, int k, int n) {
+double getViolationChargingStation(const SMAsol_struct* sol, const model_struct* model, const int k) {
     
     //setup
     double Violation=0;
     int amount_points=sol->xx.size();
-    double add_collision=100.0/amount_points;//100.0 is important, otherwise we are dividing integers by integers, which returns wrong results
+    const double add_collision=100.0/amount_points;//100.0 is important, otherwise we are dividing integers by integers, which returns wrong results
     std::vector<turned_rectangle> blocked_area_down = model->blocked_area_down;
     std::vector<turned_rectangle> blocked_area_left = model->blocked_area_left;
     std::vector<turned_rectangle> blocked_area_up = model->blocked_area_up;
@@ -763,4 +620,15 @@ double getViolationChargingStation(struct_internalpath* g, SMAsol_struct* sol, c
         }
     }
   return Violation;
+}
+
+double getSmallRadVio(const SMAsol_struct* sol)
+{
+    const double addcollision = 2;
+    double Violation=0;
+    for(const auto &rad: sol->internalpath.r)
+    {
+        Violation += addcollision * (rad<1); //punish radii below 1m in radius
+    }
+    return Violation;
 }

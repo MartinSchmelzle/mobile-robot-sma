@@ -1,6 +1,12 @@
 #include<vector>
 #include<array>
 
+struct struct_fitness{
+  double Vio; //Violation
+  double L; //Energy demand
+  double res; //resulting combined fitness
+};
+
 struct path_struct {
     std::array<double, 2> startPoint;
     std::array<double, 2> endPoint;

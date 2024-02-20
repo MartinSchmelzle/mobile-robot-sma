@@ -1,16 +1,19 @@
 #include <cmath>
 #include "slimemould_func_prototypes.h"
 #include "mapbuilder.cpp"
+#include "custom_math_operations.cpp"
 #include "processpath.cpp"
 #include<string>
+#include <chrono>
 
 int main()
 {
   //mapbuilder
-  unsigned scale = 100; //How many pixels (svg units) are in one meter? 
+  unsigned scale = 10; //How many pixels (svg units) are in one meter? 
   map mymap(arr2 {100,50},scale,1);
+  //mymap.addobstacle(rectangle(arr2{0,-15}, arr2{100,16}, scale));
   mymap.addobstacle(rectangle(arr2{10,10}, arr2{30,5}, scale, "white", "CNC machines"));
-  mymap.addobstacle(rectangle(arr2{50,10}, arr2{40,5}, scale, "teal", "3D printers"));
+  mymap.addobstacle(rectangle(arr2{50,10}, arr2{43,5}, scale, "teal", "3D printers"));
   mymap.addobstacle(rectangle(arr2{10,25}, arr2{5,20}, scale, "red", "Casting"));
   mymap.addobstacle(rectangle(arr2{30,25}, arr2{5,20}, scale));
   mymap.addobstacle(rectangle(arr2{40,25}, arr2{5,20}, scale));
@@ -28,6 +31,8 @@ int main()
   //mymap.maplist();
   mymap.createsvgmap();
 
+  //measure performance from here bcs this part changes every query
+  auto start = std::chrono::high_resolution_clock::now();
   //set AGV start and end point with start and end angles.
   query query1;
   //query1.setStart({2.0, 2.0}, 90); //start point and angle at start point
@@ -43,17 +48,23 @@ int main()
 
   //declare empty struct for path
   path_struct pathfromalg;
+  unsigned max_iter=200;
   //run algorithm
-  bool k=main_alg(&model,&pathfromalg);//call main function
-  //if(k==0){std::cout<<"path computed successfully!"<<std::endl;}else{std::cout<<"error with path calculation!"<<std::endl;}
-
+  bool k=main_alg(&model,&pathfromalg,max_iter);//call main function
+  //measure performance until here bcs the plot is not executed every time
+  auto end = std::chrono::high_resolution_clock::now(); 
+  std::chrono::duration<double> duration = end - start;
+  if(k==0){
   //path processing
     //printPathStruct(pathfromalg);
     drawpathintosvg(pathfromalg, scale);
     double distance_betw_points = 1.6;
-    std::vector<point> pointcloud=pathtopointcloud(pathfromalg, distance_betw_points);
-    drawpointcloud_svg(pointcloud, scale); //todo This function should be reviewed before handing it in => prone to bugs
+    //todo: repair this function
+    std::vector<point> pointcloud=pathtopointcloud(pathfromalg, distance_betw_points, model);
+    drawpointcloud_svg(pointcloud, scale);
     pathtocsv(pathfromalg);
-    std::cout<<"Path processed successfully!"<<std::endl;
+    //std::cout<<"Path processed successfully!"<<std::endl;
+  } 
+  std::cout << "Algorithm performance: " << duration.count() << " s\n";
     return 0;
 }

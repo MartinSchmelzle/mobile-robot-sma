@@ -4,7 +4,33 @@
 #include <vector>
 #include <array>
 
-using xycirc = std::vector<std::vector<double>>;
+struct output_SMA{
+    std::array<double,6> waypoints;
+    double Vio;
+    double res;
+};
+
+struct struct_fitness{
+  double Vio; //Violation
+  double L; //Energy demand
+  double res; //resulting combined fitness
+};
+
+struct kinematics_time{
+    double a_acc; //represents acceleration of 0 to 100 in 10s
+    double v_max; //represents 50km/h
+    double v_desired; //we want to have a certain distance from the maximum speed
+    double a_break; //represents 50km/h to 0 in 25m
+    double delta_t; //evaluated every 0.2s
+    float time_array[10000];
+    float a_array[10000] = {};
+    float v_array[10000];
+    float x_array[10000];
+    float y_array[10000];
+    float s_array[10000];
+    float w_array[10000];
+    float dwdt_array[10000];
+};
 
 struct turned_rectangle{
     double xpos;
@@ -24,38 +50,24 @@ struct path_struct {
     std::array<double, 4> arc_endpoints_y;
     std::array<double, 4> arc_center_points_x;
     std::array<double, 4> arc_center_points_y;
+    std::array<double, 4> arc_radii;
     std::array<int, 4> arc_counterclockwise;
     double XS[10];
     double YS[10];
 };
 
 struct struct_internalpath {
-    std::vector<double> degC;
-    std::vector<double> lengthC;
-    std::vector<double> lengthL;
     double startTurn;
     double endTurn;
-    std::vector<std::vector<double>> xCircle;
-    std::vector<std::vector<double>> yCircle;
+    std::array<double, 4> arc_startpoints_x;
+    std::array<double, 4> arc_startpoints_y;
+    std::array<double, 4> arc_endpoints_x;
+    std::array<double, 4> arc_endpoints_y;
     std::vector<double> s;
     std::vector<double> a;
     std::vector<double> r;
-    std::vector<double> alpha;
-    std::vector<double> beta;
     std::vector<std::vector<double>> m;
     std::vector<double> dis;
-};
-
-struct struct_dock {
-    double L;
-    double E;
-    double T;
-};
-
-struct struct_updock {
-    double L;
-    double E;
-    double T;
 };
 
 struct model_struct {
@@ -100,8 +112,8 @@ struct SMAsol_struct {
     double Violation;
     double L;
     double L2;
-    double XS[10];
-    double YS[10];
+    std::array<double,10> XS;
+    std::array<double,10> YS;
     struct_internalpath internalpath;
     std::vector<double> xx;
     std::vector<double> yy;
@@ -113,44 +125,6 @@ struct RGBColor {
     unsigned red;
     unsigned green;
     unsigned blue;
-};
-
-struct soldata_struct {
-  double XS[10];
-  double YS[10];
-  double L1;
-  double T1;
-  double L2;
-  double L;
-  double T;
-  std::array<double, 2> dx;
-  std::array<double, 2> dy;
-  double Violation;
-  bool IsFeasible;
-  double length;
-  std::array<double,2>xx;
-  std::array<double,2>yy;
-  std::array<std::array<double, 2>, 7> TS;
-  std::array<double, 2> tt;
-};
-
-
-//I'm not sure what exactly this struct does, maybe I'll find out later
-struct d_struct_T {
-  double XS[10];
-  double YS[10];
-  double L1;
-  double T1;
-  double L2;
-  double L;
-  double T;
-  std::array<double, 2> dx;
-  std::array<double, 2> dy;
-  double Violation;
-  bool IsFeasible;
-  double length;
-  std::array<double, 2> xx;
-  std::array<double, 2> yy;
 };
 
 #endif // MY_STRUCTS_H

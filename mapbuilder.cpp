@@ -8,7 +8,7 @@
 #include <cassert>
 #include "custom_datatypes.h" //makes sure the code works together with alg
 
-using arr2 = std::array<unsigned, 2>; //This makes the code less bulky. Unsigned datatype prevents negative values of position and size.
+using arr2 = std::array<int, 2>; //This makes the code less bulky. Unsigned datatype prevents negative values of position and size.
 
 //These lines are responsible for representing color => names, RGB values, mappings
 enum class col {
@@ -114,11 +114,11 @@ class obstacle {
     RGBColor color;
     std::string label;
     //Internally, everything works in svg coordinates, but user wants to enter meters for everything
-public:
+public://two constructors; one with label and color, another without
     obstacle(arr2 pos, unsigned s){
         // Constructor using initializer list to initialize position
-        position[0]=pos[0]*s;
-        position[1]= pos[1]*s;
+        position[0]=pos[0]*static_cast<int>(s);
+        position[1]= pos[1]*static_cast<int>(s);
         scale=s;
         color={0, 0,255}; //Silver by default
         label = std::string("obstacle");
@@ -133,21 +133,22 @@ public:
         label = Label;
     }
 
+    // Create at least one virtual function to make the thing polymorphic
+    virtual ~obstacle() {} 
 
+    //getters and setters
     void setpos(arr2 pos) {
         position[0] = pos[0]*scale;
         position[1] = pos[1]*scale;}
-
     arr2 getpos() {return {position[0]/scale,position[1]/scale};}
     unsigned getscale() {return scale;}
-    virtual ~obstacle() {} // Create at least one virtual function to make the thing polymorphic
     RGBColor getcolor() {return color;} //returns RGB value
     void setcolor(std::string color_input) {color=color_mapping(color_input);} //takes in string
     std::string getlabel() {return label;}
     void setlabel(std::string newlabel) {label = newlabel;}
 };
 
-class rectangle:public obstacle{ //in rectangle, position refers to upper left corner
+class rectangle:public obstacle{ //in rectangle in svg, position refers to upper left corner
     arr2 size;
     public:
     //constructor with default values
@@ -156,22 +157,24 @@ class rectangle:public obstacle{ //in rectangle, position refers to upper left c
         size[0]=Size[0]*s;
         size[1]=Size[1]*s;
     }
-    //constructor with color, label
+    //second constructor with color, label
     rectangle(arr2 pos, arr2 Size, float s, std::string Colortext, std::string Label):obstacle(pos,s,Colortext, Label)
     {
         size[0]=Size[0]*s;
         size[1]=Size[1]*s;
     }
 
-    std::array<unsigned,2> getsize(){return {size[0]/getscale(),size[1]/getscale()};}
+    arr2 getsize(){return {size[0]/getscale(),size[1]/getscale()};}
     void setsize(std::array<unsigned,2> Size){size[0]=Size[0]; size[1]=Size[1];}
 };
 
-class circle:public obstacle{ //In .svg, position refers to the center!
+class circle:public obstacle{ //For circles in .svg, position refers to the center!
     unsigned radius;
     public:
-    circle(arr2 pos, unsigned Radius, float s):obstacle(pos,s){radius=Radius*s;}
-    circle(arr2 pos, unsigned Radius, float s,std::string Colortext, std::string Label):obstacle(pos,s,Colortext,Label){radius=Radius*s;}
+    circle(arr2 pos, unsigned Radius, float s):obstacle(pos,s)
+    {radius=Radius*s;}
+    circle(arr2 pos, unsigned Radius, float s,std::string Colortext, std::string Label):obstacle(pos,s,Colortext,Label)
+    {radius=Radius*s;}
     unsigned getradius(){return radius/getscale();}
     void setradius(unsigned Radius){radius=Radius*getscale();}
 };
@@ -179,10 +182,10 @@ class circle:public obstacle{ //In .svg, position refers to the center!
 
 //class for Charging Station obstacle
 class ChargingStation:public obstacle{
-    double angle,width=2,height=1; //relative to horizontal axis, clockwise
+    double angle,width=2,height=1; //angle relative to horizontal axis, clockwise
     std::array<turned_rectangle,3> blocked_areas;
     public:
-    ChargingStation(arr2 pos, double Angle, float s):obstacle(pos,s)
+    ChargingStation(arr2 pos, double Angle, float s):obstacle(pos,s) //defining two constructors again
     {
         angle=Angle;assert(angle>=0);assert(angle<360);//angle in degrees here
         blocked_areas=calculateBlockedAreas();
@@ -198,7 +201,9 @@ class ChargingStation:public obstacle{
     void setwidth(double w){width=w;}
     double getheight(){return height;}
     void setheight(double h){height=h;}
-    //for a given Charging Station, this calculates the three areas blocking the way 
+
+    //for a given Charging Station, this calculates the three rectangular areas blocking the way
+    //in combination, they make up the horseshoe-like shape
     std::array<turned_rectangle,3> calculateBlockedAreas()
     {
         //setup
@@ -207,6 +212,7 @@ class ChargingStation:public obstacle{
         double angle = getangle();
         double height=getheight();
         double width=getwidth();
+
         //rectangle 1: below center for angle=0°=> remember here that in svg, y axis goes downward!
         blocked_areas[0].xpos=center[0] - sin(angle/180*3.1415926) * height;
         blocked_areas[0].ypos=center[1] + cos(angle/180*3.1415926)*height;
@@ -241,16 +247,17 @@ class ChargingStation:public obstacle{
 class map {
     unsigned tolerance; //space around each obstacle for the robot to avoid
     arr2 size; //length + width; this parameter is also used for rectangles
-    unsigned scale; //width of the actual factory floor for scale
+    int scale; //width of the actual factory floor for scale
     std::vector<rectangle> RectangleVector;
     std::vector<circle> CircleVector;
     std::vector<ChargingStation> ChargerVector;
     //upper left corner is on (0,0) by default
     public:
-    //initialize
+    //initialize (only one constructor)
     map(arr2 Size, unsigned s, unsigned Tolerance){
         size[0]=Size[0]*s;
         size[1]=Size[1]*s;
+        assert(s>0);
         scale = s;
         tolerance = Tolerance*s;
     }
@@ -283,13 +290,15 @@ class map {
         else{std::cerr<<"Error during map creation: Added non-viable obstacle.";}
     }
 
+
+
     //method that adds Charging Station to vector
     void addChargingStation(const ChargingStation& newcharger)
     {ChargerVector.push_back(newcharger);}
 
-    //method that prints out map size and list of obstacles
+    //method that prints out map size and list of obstacles => useful for debugging
     void maplist(){
-        std::cout<< "map: width "<<size[0]/scale <<", height "<<size[1]/scale<<", tolerance "<< tolerance<<std::endl;
+        std::cout<< "map: width "<<size[0]/scale <<", height "<<size[1]/scale<<", tolerance "<< tolerance/scale<<std::endl;
         for (auto& rect : RectangleVector) {
             std::cout << "rectangle: width " << rect.getsize()[0]
               << ", height " << rect.getsize()[1]
@@ -307,6 +316,7 @@ class map {
     
     //create an svg file of the map
     int createsvgmap() {
+        //todo: make this function more modular
         if(scale<10){std::cerr << "\033[33mWarning: scale is smaller than 10. This can lead to errors when creating .svg images. Set scale to at least 10 in the map and all obstacles to get correct plots.\033[0m" << std::endl;}
         //open or create .svg file
         std::ofstream svgFile("map.svg");
@@ -319,6 +329,7 @@ class map {
         unsigned numGridLines = 9; // Number of grid lines in both coordinate directions
         unsigned strokewidth=static_cast<unsigned>(1*scale/10);//Line thickness. Note that the line is thicker for the frame
 
+        //for modifying the lines writing into the svg file, I highly recommend ChatGPT
         //draw map
         svgFile << "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"" << size[0] << "\" height=\"" << size[1] << "\" version=\"1.1\">\n";
         
@@ -441,22 +452,17 @@ public:
 
     // Getters
     std::array<double, 2> getStartPoint() const {return startPoint;}
-
     std::array<double, 2> getEndPoint() const {return endPoint;}
-
     double getStartAngle() const {return startAngle;}
-
     double getEndAngle() const {return endAngle;}
     double getobs_avoid_weight() {return obs_avoid_weight;}
     unsigned getcoll_avoid_resolution(){return coll_avoid_resolution;}
-
     std::array<bool,2> getCharging_Station() const{return Charging_Station;}
 
     // Setters
     void setStartPoint(const std::array<double, 2>& startP) {
         startPoint = startP;
         assert(startPoint[0]>=0 && startPoint[1]>=0);}
-    
     //set Charging Station as Start Point
     void setStart(ChargingStation charger){
         arr2 pos=charger.getpos();
@@ -493,7 +499,7 @@ public:
     void setCharging_Station(std::array<bool,2> charge) {Charging_Station=charge; assert(Charging_Station[0] == false or Charging_Station[1] == false);}
 };
 
-//function that prints out the struct Model
+//function that prints out the model struct => useful for debugging
 void printModel(const model_struct& Model) {
     std::cout << "AisChargingStation: " << Model.AisChargingStation << std::endl;
     std::cout << "BisChargingStation: " << Model.BisChargingStation << std::endl;
@@ -564,21 +570,23 @@ model_struct maptomodel(map Map, query Query)
     //setup
     std::vector<rectangle> RectangleVector=Map.getRectangleVector();
     std::vector<circle> CircleVector=Map.getCircleVector();
-    //for(int i=0;i<CircleVector.size();i++){std::cout<<"position of CircleVectors: "<<CircleVector[i].getpos()[0]<<","<<CircleVector[i].getpos()[1]<<std::endl;}
     unsigned n_rect = RectangleVector.size();
     unsigned n_circ = CircleVector.size();
     struct model_struct Model;
     struct model_struct *p_Model = &Model;
-    Model.xobs_rect.resize(n_rect); //Do this to avoid segfault
+
+    //While this step should theoretically be redundant, it avoids a segfault, so it's good to have
+    Model.xobs_rect.resize(n_rect); 
     Model.yobs_rect.resize(n_rect);
     Model.xwidth.resize(n_rect);
     Model.ywidth.resize(n_rect);
+
+    //start filling up model struct
     Model.n=n_rect+n_circ;
     assert(Model.xobs_rect.size()==n_rect);
 
     //Rectangles
     double tolerance = Map.gettolerance();
-
     std::vector<arr2> rect_pos(n_rect);
     std::vector<arr2> rect_center_pos(n_rect);
     std::vector<arr2> rect_size(n_rect);
@@ -601,7 +609,7 @@ model_struct maptomodel(map Map, query Query)
     assert(Model.ywidth[1]==rect_size[1][1]);
 
     //set obstacle to account for non-squared map size
-    //Since the algorithm only works with quadratic maps, we add an obstacle to make sure it uses the actual map size
+    //!Since the algorithm only works with quadratic maps, we add an obstacle to make sure it uses the actual map size
     //It uses the larger size as the square length, then adds an obs at the end
     //If the map is actually square-shaped, the code jumps (yes, with a goto-statement!) to the end of this section.
     p_Model->lb=0;
@@ -637,6 +645,7 @@ model_struct maptomodel(map Map, query Query)
     assert(Model.xobs_rect.size()==n_rect+1);
     //std::cout<<"xpos: "<<xpos<<" ypos: "<<ypos<<" xwidth: "<<xwidth<<" ywidth: "<<ywidth<<std::endl;
     skip_non_quad_compensation:
+
     //Circles
     for(int i=0;i<n_circ;i++)
     {
@@ -671,6 +680,7 @@ model_struct maptomodel(map Map, query Query)
 
     return Model;
 }
+
 /*
 int main()
 {

@@ -1,4 +1,5 @@
 #include <cmath>
+#include<array>
 #include <iostream>
 #include <random>
 #include <cstring>
@@ -333,4 +334,65 @@ int randi(int lower_bound, int upper_bound) {
 
     // Generate a random integer
     return distribution(gen);
+}
+
+//this function takes in three vectors start, center and end. It returns the cross product between them.
+inline double arc_cross(std::array<double,2> start, std::array<double,2> center, std::array<double,2> end)
+{
+    std::array<double,2> vectorStart = {start[0] - center[0], start[1] - center[1]};
+    std::array<double,2> vectorEnd = {end[0] - center[0], end[1] - center[1]};
+    double crossProduct = vectorStart[0] * vectorEnd[1] - vectorStart[1] * vectorEnd[0];
+    return crossProduct;
+}
+//get distance between two points in 2D space
+double euclid_dist(std::array<double,2> start, std::array<double,2> end)
+{
+    return sqrt((end[0]-start[0])* (end[0]-start[0]) + (end[1]-start[1])* (end[1]-start[1]));
+}
+//this function takes in three vectors start, center and end. It returns the direction (1: counterclockwise, -1: clockwise) between them.
+inline int arc_direction(std::array<double,2> start, std::array<double,2> center, std::array<double,2> end)
+{
+    std::array<double,2> vectorStart = {start[0] - center[0], start[1] - center[1]};
+    std::array<double,2> vectorEnd = {end[0] - center[0], end[1] - center[1]};
+    double crossProduct = vectorStart[0] * vectorEnd[1] - vectorStart[1] * vectorEnd[0];
+    if(crossProduct>0){return 1;}
+    else{return -1;}
+}
+
+//this function calculates the angle subtended by an arc => negative for clock-wise angle
+inline double arc_angle(std::array<double,2> start, std::array<double,2> center, std::array<double,2> end)
+{
+    std::array<double,2> vectorStart = {start[0] - center[0], start[1] - center[1]};
+    std::array<double,2> vectorEnd = {end[0] - center[0], end[1] - center[1]};
+    double angle_start = std::atan2(vectorStart[1], vectorStart[0]); //angle towards (1,0) at start of arc
+    if(angle_start<0){angle_start+=2*3.1415926;}
+    double angle_end = std::atan2(vectorEnd[1], vectorEnd[0]); //angle towards (1,0) at start of arc
+    if(angle_end<0){angle_end+=2*3.1415926;}
+    double angle = angle_end-angle_start;
+    int dir = arc_direction(start,center,end);
+    //std::cout<<"angle start: "<<angle_start<<", angle end: "<<angle_end<<", direction: "<<dir<<"\n";
+    // Adjust angle based on the arc direction (clockwise or counterclockwise)
+    if (angle > 0 && dir==-1) {
+        angle -= 2 * 3.1415926;
+    }
+    if (angle < 0 && dir==1) {
+        angle += 2 * 3.1415926;
+    }
+    if(dir==0){
+    angle=0;//std::cout<<"Setting angle to 0\n";
+    }
+
+    return angle;
+}
+
+// Function to calculate the arc length given start, end, and center points
+//needed for conversion to pointcloud
+double getArcLength(std::array<double,2> start, std::array<double,2> center, std::array<double,2> end) {
+    
+    double radius = euclid_dist(start,center);
+
+    double angle = arc_angle(start,center,end);
+    // Calculate the arc length using formula s = r * theta
+    double arc_length = fabs(radius * angle);
+    return arc_length;
 }
