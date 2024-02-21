@@ -1,71 +1,457 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="10000" height="5000" version="1.1">
-<rect x="0" y="0" width="10000" height="5000" fill="none" stroke="black" stroke-width="30" />
-<text x="9990" y="200" font-size="120" text-anchor="end">100</text>
-<text x="10" y="4990" font-size="120">50</text>
-<line x1="0" y1="500" x2="10000" y2="500" stroke="gray" stroke-width="10" />
-<text x="5" y="495" font-size="120" fill="gray">5</text>
-<line x1="1000" y1="0" x2="1000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="995" y="200" font-size="120" fill="gray" text-anchor="end">10</text>
-<line x1="0" y1="1000" x2="10000" y2="1000" stroke="gray" stroke-width="10" />
-<text x="5" y="995" font-size="120" fill="gray">10</text>
-<line x1="2000" y1="0" x2="2000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="1995" y="200" font-size="120" fill="gray" text-anchor="end">20</text>
-<line x1="0" y1="1500" x2="10000" y2="1500" stroke="gray" stroke-width="10" />
-<text x="5" y="1495" font-size="120" fill="gray">15</text>
-<line x1="3000" y1="0" x2="3000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="2995" y="200" font-size="120" fill="gray" text-anchor="end">30</text>
-<line x1="0" y1="2000" x2="10000" y2="2000" stroke="gray" stroke-width="10" />
-<text x="5" y="1995" font-size="120" fill="gray">20</text>
-<line x1="4000" y1="0" x2="4000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="3995" y="200" font-size="120" fill="gray" text-anchor="end">40</text>
-<line x1="0" y1="2500" x2="10000" y2="2500" stroke="gray" stroke-width="10" />
-<text x="5" y="2495" font-size="120" fill="gray">25</text>
-<line x1="5000" y1="0" x2="5000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="4995" y="200" font-size="120" fill="gray" text-anchor="end">50</text>
-<line x1="0" y1="3000" x2="10000" y2="3000" stroke="gray" stroke-width="10" />
-<text x="5" y="2995" font-size="120" fill="gray">30</text>
-<line x1="6000" y1="0" x2="6000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="5995" y="200" font-size="120" fill="gray" text-anchor="end">60</text>
-<line x1="0" y1="3500" x2="10000" y2="3500" stroke="gray" stroke-width="10" />
-<text x="5" y="3495" font-size="120" fill="gray">35</text>
-<line x1="7000" y1="0" x2="7000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="6995" y="200" font-size="120" fill="gray" text-anchor="end">70</text>
-<line x1="0" y1="4000" x2="10000" y2="4000" stroke="gray" stroke-width="10" />
-<text x="5" y="3995" font-size="120" fill="gray">40</text>
-<line x1="8000" y1="0" x2="8000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="7995" y="200" font-size="120" fill="gray" text-anchor="end">80</text>
-<line x1="0" y1="4500" x2="10000" y2="4500" stroke="gray" stroke-width="10" />
-<text x="5" y="4495" font-size="120" fill="gray">45</text>
-<line x1="9000" y1="0" x2="9000" y2="5000" stroke="gray" stroke-width="10" />
-<text x="8995" y="200" font-size="120" fill="gray" text-anchor="end">90</text>
-<rect x="900" y="900" width="3200" height="700" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="1000" y="1000" width="3000" height="500" fill="rgb(255,255,255)" />
-<text x="2500" y="1250" fill="rgb(0,0,0)" text-anchor="middle" alignment-baseline="middle">CNC machines</text>
-<rect x="4900" y="900" width="4200" height="700" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="5000" y="1000" width="4000" height="500" fill="rgb(0,128,128)" />
-<text x="7000" y="1250" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle">3D printers</text>
-<rect x="900" y="2400" width="700" height="2200" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="1000" y="2500" width="500" height="2000" fill="rgb(255,0,0)" />
-<text x="1250" y="3500" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 1250,3500)">Casting</text>
-<rect x="2900" y="2400" width="700" height="2200" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="3000" y="2500" width="500" height="2000" fill="rgb(0,0,255)" />
-<text x="3250" y="3500" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 3250,3500)">obstacle</text>
-<rect x="3900" y="2400" width="700" height="2200" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="4000" y="2500" width="500" height="2000" fill="rgb(0,0,255)" />
-<text x="4250" y="3500" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 4250,3500)">obstacle</text>
-<rect x="4900" y="2400" width="700" height="2200" rx="100" ry="100" fill="rgba(192,192,192,0.6)" />
-<rect x="5000" y="2500" width="500" height="2000" fill="rgb(0,0,255)" />
-<text x="5250" y="3500" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 5250,3500)">obstacle</text>
-<circle cx="7500" cy="3500" r="1300" fill="rgba(192,192,192,0.6)" />
-<circle cx="7500" cy="3500" r="1200" fill="rgb(128,0,0)" />
-<text x="7500" y="3500" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle">Nuclear Reactor</text>
-<rect x="4.44089e-14" y="150" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(90 100 200)" />
-<rect x="150" y="-100" width="100" height="300" fill="rgb(255,165,0)" transform="rotate(90 200 50)" />
-<rect x="200" y="150" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(90 300 200)" />
-<rect x="300" y="150" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(90 400 200)" />
-<rect x="450" y="-100" width="100" height="300" fill="rgb(255,165,0)" transform="rotate(90 500 50)" />
-<rect x="500" y="150" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(90 600 200)" />
-<rect x="1829.29" y="2179.29" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(135 1929.29 2229.29)" />
-<rect x="2056.07" y="2043.93" width="100" height="300" fill="rgb(255,165,0)" transform="rotate(135 2106.07 2193.93)" />
-<rect x="1970.71" y="2320.71" width="200" height="100" fill="rgb(255,165,0)" transform="rotate(135 2070.71 2370.71)" />
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" version="1.1">
+<rect x="0" y="0" width="1000" height="500" fill="none" stroke="black" stroke-width="3" />
+<text x="990" y="20" font-size="12" text-anchor="end">100</text>
+<text x="10" y="490" font-size="12">50</text>
+<line x1="0" y1="50" x2="1000" y2="50" stroke="gray" stroke-width="1" />
+<text x="5" y="45" font-size="12" fill="gray">5</text>
+<line x1="100" y1="0" x2="100" y2="500" stroke="gray" stroke-width="1" />
+<text x="95" y="20" font-size="12" fill="gray" text-anchor="end">10</text>
+<line x1="0" y1="100" x2="1000" y2="100" stroke="gray" stroke-width="1" />
+<text x="5" y="95" font-size="12" fill="gray">10</text>
+<line x1="200" y1="0" x2="200" y2="500" stroke="gray" stroke-width="1" />
+<text x="195" y="20" font-size="12" fill="gray" text-anchor="end">20</text>
+<line x1="0" y1="150" x2="1000" y2="150" stroke="gray" stroke-width="1" />
+<text x="5" y="145" font-size="12" fill="gray">15</text>
+<line x1="300" y1="0" x2="300" y2="500" stroke="gray" stroke-width="1" />
+<text x="295" y="20" font-size="12" fill="gray" text-anchor="end">30</text>
+<line x1="0" y1="200" x2="1000" y2="200" stroke="gray" stroke-width="1" />
+<text x="5" y="195" font-size="12" fill="gray">20</text>
+<line x1="400" y1="0" x2="400" y2="500" stroke="gray" stroke-width="1" />
+<text x="395" y="20" font-size="12" fill="gray" text-anchor="end">40</text>
+<line x1="0" y1="250" x2="1000" y2="250" stroke="gray" stroke-width="1" />
+<text x="5" y="245" font-size="12" fill="gray">25</text>
+<line x1="500" y1="0" x2="500" y2="500" stroke="gray" stroke-width="1" />
+<text x="495" y="20" font-size="12" fill="gray" text-anchor="end">50</text>
+<line x1="0" y1="300" x2="1000" y2="300" stroke="gray" stroke-width="1" />
+<text x="5" y="295" font-size="12" fill="gray">30</text>
+<line x1="600" y1="0" x2="600" y2="500" stroke="gray" stroke-width="1" />
+<text x="595" y="20" font-size="12" fill="gray" text-anchor="end">60</text>
+<line x1="0" y1="350" x2="1000" y2="350" stroke="gray" stroke-width="1" />
+<text x="5" y="345" font-size="12" fill="gray">35</text>
+<line x1="700" y1="0" x2="700" y2="500" stroke="gray" stroke-width="1" />
+<text x="695" y="20" font-size="12" fill="gray" text-anchor="end">70</text>
+<line x1="0" y1="400" x2="1000" y2="400" stroke="gray" stroke-width="1" />
+<text x="5" y="395" font-size="12" fill="gray">40</text>
+<line x1="800" y1="0" x2="800" y2="500" stroke="gray" stroke-width="1" />
+<text x="795" y="20" font-size="12" fill="gray" text-anchor="end">80</text>
+<line x1="0" y1="450" x2="1000" y2="450" stroke="gray" stroke-width="1" />
+<text x="5" y="445" font-size="12" fill="gray">45</text>
+<line x1="900" y1="0" x2="900" y2="500" stroke="gray" stroke-width="1" />
+<text x="895" y="20" font-size="12" fill="gray" text-anchor="end">90</text>
+<rect x="90" y="90" width="320" height="70" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="100" y="100" width="300" height="50" fill="rgb(255,255,255)" />
+<text x="250" y="125" fill="rgb(0,0,0)" text-anchor="middle" alignment-baseline="middle">CNC machines</text>
+<rect x="490" y="0" width="420" height="160" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="500" y="10" width="400" height="140" fill="rgb(0,128,128)" />
+<text x="700" y="80" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle">3D printers</text>
+<rect x="90" y="240" width="70" height="220" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="100" y="250" width="50" height="200" fill="rgb(255,0,0)" />
+<text x="125" y="350" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 125,350)">Casting</text>
+<rect x="290" y="240" width="70" height="220" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="300" y="250" width="50" height="200" fill="rgb(0,0,255)" />
+<text x="325" y="350" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 325,350)">obstacle</text>
+<rect x="390" y="240" width="70" height="220" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="400" y="250" width="50" height="200" fill="rgb(0,0,255)" />
+<text x="425" y="350" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 425,350)">obstacle</text>
+<rect x="490" y="240" width="70" height="220" rx="10" ry="10" fill="rgba(192,192,192,0.6)" />
+<rect x="500" y="250" width="50" height="200" fill="rgb(0,0,255)" />
+<text x="525" y="350" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle" transform="rotate(270 525,350)">obstacle</text>
+<circle cx="750" cy="350" r="130" fill="rgba(192,192,192,0.6)" />
+<circle cx="750" cy="350" r="120" fill="rgb(128,0,0)" />
+<text x="750" y="350" fill="rgb(255,255,255)" text-anchor="middle" alignment-baseline="middle">Nuclear Reactor</text>
+<rect x="3.55271e-15" y="15" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(90 10 20)" />
+<rect x="15" y="-10" width="10" height="30" fill="rgb(255,165,0)" transform="rotate(90 20 5)" />
+<rect x="20" y="15" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(90 30 20)" />
+<rect x="30" y="15" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(90 40 20)" />
+<rect x="45" y="-10" width="10" height="30" fill="rgb(255,165,0)" transform="rotate(90 50 5)" />
+<rect x="50" y="15" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(90 60 20)" />
+<rect x="182.929" y="217.929" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(135 192.929 222.929)" />
+<rect x="205.607" y="204.393" width="10" height="30" fill="rgb(255,165,0)" transform="rotate(135 210.607 219.393)" />
+<rect x="197.071" y="232.071" width="20" height="10" fill="rgb(255,165,0)" transform="rotate(135 207.071 237.071)" />
+<circle cx="20" cy="20" r="4" fill="none" stroke="black" stroke-width="2" />
+
+<circle cx="880" cy="260" r="4" fill="none" stroke="black" stroke-width="2" />
+
+<line x1="20" y1="20" x2="20" y2="450" style="stroke:black;stroke-width:2" />
+
+<line x1="50" y1="480" x2="550" y2="480" style="stroke:black;stroke-width:2" />
+
+<line x1="580" y1="450" x2="580" y2="230" style="stroke:black;stroke-width:2" />
+
+<line x1="620" y1="190" x2="830" y2="190" style="stroke:black;stroke-width:2" />
+
+<line x1="880" y1="240" x2="880" y2="260" style="stroke:black;stroke-width:2" />
+
+<path d="M 20,450 A 30.000000,30.000000 0 0 0 50,480" fill="none" stroke="black" stroke-width="2" />
+
+<path d="M 550,480 A 30.000000,30.000000 0 0 0 580,450" fill="none" stroke="black" stroke-width="2" />
+
+<path d="M 580,230 A 40.000000,40.000000 0 0 1 620,190" fill="none" stroke="black" stroke-width="2" />
+
+<path d="M 830,190 A 50.000000,50.000000 0 0 1 880,240" fill="none" stroke="black" stroke-width="2" />
+
+<circle cx="20" cy="20" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="880" cy="260" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="0" cy="0" r="3" fill="green" />
+
+<circle cx="50" cy="450" r="3" fill="orange" />
+
+<circle cx="550" cy="450" r="3" fill="orange" />
+
+<circle cx="620" cy="230" r="3" fill="orange" />
+
+<circle cx="830" cy="240" r="3" fill="orange" />
+
+<circle cx="20.000000" cy="20.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="30.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="40.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="50.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="60.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="70.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="80.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="90.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="100.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="110.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="120.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="130.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="140.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="150.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="160.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="170.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="180.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="200.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="210.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="220.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="230.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="240.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="250.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="260.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="270.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="280.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="290.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="300.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="310.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="320.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="330.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="340.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="350.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="360.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="370.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="380.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="390.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="400.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="410.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="420.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="430.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="440.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="20.000000" cy="450.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="21.651292" cy="459.815841" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="24.919708" cy="466.461438" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="29.716532" cy="472.103866" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="35.749441" cy="476.399272" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="42.650788" cy="479.085891" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="50.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="60.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="70.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="80.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="90.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="100.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="110.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="120.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="130.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="140.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="150.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="160.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="170.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="180.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="190.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="200.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="210.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="220.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="230.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="240.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="250.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="260.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="270.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="280.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="290.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="300.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="310.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="320.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="330.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="340.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="350.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="360.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="370.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="380.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="390.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="400.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="410.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="420.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="430.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="440.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="450.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="460.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="470.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="480.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="490.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="500.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="510.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="520.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="530.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="540.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="550.000000" cy="480.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="559.815841" cy="478.348708" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="566.461438" cy="475.080292" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="572.103866" cy="470.283468" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="576.399272" cy="464.250559" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="579.085891" cy="457.349212" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="450.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="440.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="430.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="420.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="410.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="400.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="390.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="380.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="370.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="360.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="350.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="340.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="330.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="320.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="310.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="300.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="290.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="280.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="270.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="260.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="250.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="240.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="580.000000" cy="230.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="581.243503" cy="220.103842" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="583.787563" cy="213.010020" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="587.617042" cy="206.519284" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="592.596005" cy="200.862034" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="598.547716" cy="196.239083" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="605.260911" cy="192.814529" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="612.497293" cy="190.709933" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="619.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="629.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="639.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="649.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="659.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="669.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="679.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="689.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="699.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="709.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="719.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="729.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="739.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="749.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="759.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="769.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="779.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="789.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="799.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="809.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="819.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="829.999996" cy="190.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="839.933457" cy="190.996669" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="848.143657" cy="193.408073" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="855.822450" cy="197.184102" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="862.744931" cy="202.214163" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="868.708349" cy="208.350929" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="873.538042" cy="215.414661" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="877.092554" cy="223.198472" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="879.267777" cy="231.474380" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="880.000000" cy="239.999995" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="880.000000" cy="249.999995" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
+<circle cx="880.000000" cy="260.000000" r="4" fill="none" stroke="#66BB6A" stroke-width="2" />
+
 </svg>
