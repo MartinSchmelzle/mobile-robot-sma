@@ -12,7 +12,7 @@ This file describes how to get it to run and what it can do for you.
 5. An executable `slime_alg_exe.exe` is generated in the build directory. Run it. The example `CALL-ALG.cpp` should be executed automatically.
 
 # Usage
-See the script CALL-ALG.cpp as an example.
+See the script `CALL-ALG.cpp` as an example.
 The first step is map creation. Create a rectangular map `map mymap(arr2 {100,50},scale,tol);` with a size of your choosing (in this example, 100x50).
 If your map is not rectangular, that is not a problem; in this case, create a rectangular map with the maximum dimensions and create obstacles later to emulate your desired map shape.
 Whether you prefer metric or imperial units is entirely up to you. The variable `scale` defines the precision of the map. It should be set to a value 10 or higher.
