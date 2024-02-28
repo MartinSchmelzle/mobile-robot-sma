@@ -1,3 +1,9 @@
+// Scientific basis: (Please refer to the main paper):
+// Slime Mould Algorithm: A New Method for Stochastic Optimization
+// Shimin Li, Huiling Chen, Mingjing Wang, Ali Asghar Heidari, Seyedali Mirjalili
+// Future Generation Computer Systems,2020
+// DOI: https://doi.org/10.1016/j.future.2020.03.055
+// https://www.sciencedirect.com/science/article/pii/S0167739X19320941
 
 #include <iostream>
 #include <limits>
