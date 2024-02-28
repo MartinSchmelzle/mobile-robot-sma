@@ -4,24 +4,33 @@
 #include <vector>
 #include <array>
 
+//This struct is supposed to represent algorithm configuration
+//todo: expand on it, e.g. with variable amount of arcs, variable amount of search agents etc.
+struct alg_data{
+    int max_iter;
+    double distance_discrete;
+};
+
 struct output_SMA{
     std::array<double,6> waypoints;
-    double Vio;
+    float Vio;
     double res;
 };
 
 struct struct_fitness{
-  double Vio; //Violation
+  float Vio; //Violation
   double L; //Energy demand
   double res; //resulting combined fitness
 };
 
 struct kinematics_time{
-    double a_acc; //represents acceleration of 0 to 100 in 10s
-    double v_max; //represents 50km/h
-    double v_desired; //we want to have a certain distance from the maximum speed
-    double a_break; //represents 50km/h to 0 in 25m
-    double delta_t; //evaluated every 0.2s
+    double a_acc; //represents acceleration of robot
+    double v_max; //represents max speed
+    double v_desired; //we don't want to be exactly on the maximum speed
+    double a_break; //represents acceleration during deceleration. Must be <0!
+    double delta_t; //time interval
+    double P_idle; //power consumption with v=0 and a=0
+    double mass; //weight of the mobile robot
     float time_array[10000];
     float a_array[10000] = {};
     float v_array[10000];
@@ -68,6 +77,8 @@ struct struct_internalpath {
     std::vector<double> r;
     std::vector<std::vector<double>> m;
     std::vector<double> dis;
+    std::array<std::array<double,2>,5> lineVector; //This is used by discretize and getEnergy. Important: This is a unit vector!
+    std::array<double,5> lineLength;
 };
 
 struct model_struct {
@@ -109,22 +120,48 @@ struct model_struct {
 };
 
 struct SMAsol_struct {
-    double Violation;
+    float Violation;
     double L;
     double L2;
     std::array<double,10> XS;
     std::array<double,10> YS;
     struct_internalpath internalpath;
-    std::vector<double> xx;
-    std::vector<double> yy;
+    std::vector<float> xx;
+    std::vector<float> yy;
     // Add other members as needed
 };
+
+using arr2 = std::array<int, 2>; //This makes the code less bulky. Unsigned datatype prevents negative values of position and size.
 
 //define RGB value
 struct RGBColor {
     unsigned red;
     unsigned green;
     unsigned blue;
+};
+
+//These lines are responsible for representing color => names, RGB values, mappings
+enum class col {
+    red,
+    green,
+    blue,
+    orange,
+    yellow,
+    purple,
+    cyan,
+    magenta,
+    pink,
+    teal,
+    lime,
+    indigo,
+    gold,
+    silver,
+    maroon,
+    navy,
+    brown,
+    black,
+    white,
+    // Add more colors as needed...
 };
 
 #endif // MY_STRUCTS_H

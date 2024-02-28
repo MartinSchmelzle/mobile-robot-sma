@@ -1,0 +1,10 @@
+AGV-related data,0
+a_acceleration,0.20363
+v_max,1.494
+a_break,0.18216
+P_idle,64.6
+mass_empty,80
+,
+algorithm-related data,0
+max_iter,200
+distance_discrete,0.2
