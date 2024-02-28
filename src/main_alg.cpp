@@ -1,3 +1,8 @@
+//Copyright (c) 2024, Fraunhofer IGCV.
+//All rights reserved.
+//Developers, Martin Schmelzle, Christian Karg, Christian Härdtlein
+//Contact: mjschmelz180@gmail.com
+
 #include <iostream>
 #include <limits>
 #include "../custom_datatypes.h"
