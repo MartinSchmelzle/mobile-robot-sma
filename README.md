@@ -44,6 +44,10 @@ After the algorithm runs, the path can be processed in different ways:
 - `drawpointcloud_svg(pointcloud, scale);` draws the resulting point cloud into the svg file.
 - `pathtocsv(pathfromalg);` writes the path struct into a csv file.
 
+# Credits
+Our algorithm is directly based upon the SMA algorithm developed by Li et al. (https://doi.org/10.1016/j.future.2020.03.055).
+Moreover, some parts of our codebase are indirectly based upon the contributions to PSO algorithms by the Yarpiz team (yarpiz.com).
+
 # Community
 If you have difficulty using the algorithm, would like to suggest improvements or would like to work together with us, feel free to message any of us:
 https://de.linkedin.com/in/martin-schmelzle
