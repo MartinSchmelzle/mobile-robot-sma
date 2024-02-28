@@ -1,1 +1,0 @@
-C:\MinGW\bin\g++.exe  -O3 -flto -fprofile-generate -flto -march=native "CMakeFiles/slime_alg_exe.dir/CALL-ALG.cpp.obj" CMakeFiles/slime_alg_exe.dir/main_alg.cpp.obj CMakeFiles/slime_alg_exe.dir/F00.cpp.obj -o slime_alg_exe.exe  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

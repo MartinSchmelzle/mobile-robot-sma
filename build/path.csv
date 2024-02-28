@@ -1,9 +1,0 @@
-Type, x Startpoint, y Startpoint, x Endpoint, y Endpoint, x Center Point, y Center Point, Clockwise(-1) / Counterclockwise (1)
-line,2,2,2,40.64
-arc,2,40.64,9.59119,47.9964,9.36,40.64,1
-line,9.59119,47.9964,51.25,48
-arc,51.25,48,58,41.25,51.25,41.25,1
-line,58,41.25,58,27.75
-arc,58,27.75,64.75,21,64.75,27.75,-1
-line,64.75,21,85.5,21
-arc,85.5,21,88,23.5,85.5,23.5,-1
