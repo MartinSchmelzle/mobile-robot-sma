@@ -533,7 +533,7 @@ void printModel(const model_struct& Model) {
     std::cout << "lb: "<<Model.lb<<std::endl;
     std::cout << "ub: "<<Model.ub<<std::endl;
     
-    std::cout << "facV: "<<Model.facV<< std::endl;
+    //std::cout << "facV: "<<Model.facV<< std::endl;
     std::cout<<"nrEl: "<<Model.nrEl<<std::endl;
 
     std::cout << std::endl;
@@ -642,7 +642,7 @@ model_struct maptomodel(map Map, query Query)
     std::array<bool,2> charge =Query.getCharging_Station();
     Model.AisChargingStation=charge[0];
     Model.BisChargingStation=charge[1];
-    Model.facV=Query.getobs_avoid_weight();
+    //Model.facV=Query.getobs_avoid_weight(); //outdated: We now write algorithm data into the config file
     Model.nrEl=Query.getcoll_avoid_resolution();
 
     //Charging Stations

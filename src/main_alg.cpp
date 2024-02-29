@@ -1,8 +1,3 @@
-//Copyright (c) 2024, Fraunhofer IGCV.
-//All rights reserved.
-//Developers, Martin Schmelzle, Christian Karg, Christian Härdtlein
-//Contact: mjschmelz180@gmail.com
-
 #include <iostream>
 #include <limits>
 #include "../custom_datatypes.h"
@@ -15,9 +10,9 @@ void printVector(const std::vector<double>& vec) {
     }
 }
 
-void print2DVector(const std::vector<std::vector<double>>& vec) {
+void print2DVector(const std::vector<std::array<double,2>>& vec) {
     for (size_t i = 0; i < vec.size(); ++i) {
-        for (size_t j = 0; j < vec[i].size(); ++j) {
+        for (size_t j = 0; j < 2; ++j) {
             std::cout << vec[i][j] << " ";
         }
         std::cout << std::endl;
@@ -28,7 +23,6 @@ void print2DVector(const std::vector<std::vector<double>>& vec) {
 void printSMAsol(const SMAsol_struct& sol) {
     std::cout << "Violation: " << sol.Violation << std::endl;
     std::cout << "L: " << sol.L << std::endl;
-    std::cout << "L2: " << sol.L2 << std::endl;
     std::cout << "XS: ";
     for (int i = 0; i < 10; ++i) {
         std::cout << sol.XS[i] << " ";
@@ -59,7 +53,7 @@ void printSMAsol(const SMAsol_struct& sol) {
     std::cout << std::endl;
 }
 
-bool mr_sma_alg(model_struct *model, path_struct *path)
+bool mr_sma_alg(model_struct *model, SMAsol_struct *sol)
 {
 
     //read out kinematics- and AGV- related data from config file
@@ -96,17 +90,19 @@ bool mr_sma_alg(model_struct *model, path_struct *path)
         attempt+=1;
     }
 
-    // Convert path into different format for path processing
-    //todo: change path processing to work with SMAsol instead of requiring reformatting and path struct
-    path_struct p=format_path(&SMAsol,model);
-    //std::cout<<"path formatted\n";
+    //get arc directions for path processing
+    std::array<double,2> vecStart;
+    std::array<double,2> vecEnd;
+    std::array<double,2> vecCenter;
 
-    //Assign value of p to path (pointer) with appropriate error handling
-    if (path != nullptr) {
-            *path = p; // Copy the contents of p into the object pointed to by path
-        } else {
-            std::cout << "Path Output: Invalid pointer to path_struct!\n";
-        }
+    for(int i=0;i<4;i++){
+    vecStart={SMAsol.internalpath.arc_startpoints_x[i], SMAsol.internalpath.arc_startpoints_y[i]};
+    vecCenter={SMAsol.internalpath.m[i][0],SMAsol.internalpath.m[i][1]};
+    vecEnd={SMAsol.internalpath.arc_endpoints_x[i], SMAsol.internalpath.arc_endpoints_y[i]};
+    SMAsol.internalpath.arc_direction[i] = arc_direction(vecStart,vecCenter,vecEnd);
+    }
+
+    *sol = SMAsol; // Copy the contents of p into the object pointed to by path
 
     std::cout<<"SMA done!";
     delete kin;

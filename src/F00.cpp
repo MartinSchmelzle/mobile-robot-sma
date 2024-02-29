@@ -1,4 +1,4 @@
-
+//#include "get_Energy_v2.cpp"
 //#include <iostream>
 #include "../custom_datatypes.h"
 #include "../slimemould_func_prototypes.h"
@@ -6,12 +6,9 @@
 #include <iostream>
 #include <cmath>
 
-//  Based on an algorithm developed by Yarpiz (Project Code: YPAP115). All rights reserved.
+//  Based on an algorithm developed by Yarpiz (Project Code: YPAP115)
 //  Project Title: Path Planning using PSO in MATLAB
 //  Publisher: Yarpiz (www.yarpiz.com)
-// Copyright (c) 2015, Yarpiz (www.yarpiz.com)
-// Developer: S. Mostapha Kalami Heris (Member of Yarpiz Team)
-// Contact Info: sm.kalami@gmail.com, info@yarpiz.com
 
 //set accuracy to 0 for rough calculation, to 1 for fine calculation
 struct_fitness F00(double x[6], const model_struct *model, SMAsol_struct *sol,kinematics_time* kin, const bool accuracy)
