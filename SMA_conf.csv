@@ -8,3 +8,4 @@ mass_empty,80
 algorithm-related data,0
 max_iter,200
 distance_discrete,0.2
+agents,150

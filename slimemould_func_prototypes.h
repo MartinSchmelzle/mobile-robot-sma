@@ -3,7 +3,7 @@
 #include "custom_datatypes.h"
 #include <string>
 //main
-bool mr_sma_alg(model_struct *model, path_struct *path);
+bool mr_sma_alg(model_struct *model, SMAsol_struct *sol);
 
 using point = std::array<double, 2>;
 //custom math operations
@@ -88,13 +88,11 @@ double getEnergy_v2(SMAsol_struct* sol, kinematics_time* kin);
 std::vector<double> findinh(const std::string& searchString);
 //SMA
 output_SMA SMA(const model_struct *model, SMAsol_struct* sol1, kinematics_time* kin, alg_data* alg);
-//format_path
-path_struct format_path(SMAsol_struct* SMAsol,model_struct *model);
 //processpath
-void printPathStruct(const path_struct& path);
-int drawpathintosvg(path_struct path,unsigned scale);
+void printPathStruct(const SMAsol_struct* sol);
+int drawpathintosvg(SMAsol_struct* sol,unsigned scale);
 std::vector<point> calculatePointsOnArc_legacy(const point start, const point center, const point end,
                                         int direction, double distance_betw_points,double addtonext, double &arcLength);
-std::vector<point> pathtopointcloud(path_struct path, double distance_betw_points, model_struct model);
+std::vector<point> pathtopointcloud(SMAsol_struct* sol, double distance_betw_points, model_struct model);
 int drawpointcloud_svg(std::vector<point> pointcloud, unsigned scale);
-int pathtocsv(path_struct path);
+int pathtocsv(SMAsol_struct* sol);

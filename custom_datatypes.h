@@ -50,21 +50,6 @@ struct turned_rectangle{
 
 };
 
-struct path_struct {
-    std::array<double, 2> startPoint;
-    std::array<double, 2> endPoint;
-    std::array<double, 4> arc_startpoints_x;
-    std::array<double, 4> arc_startpoints_y;
-    std::array<double, 4> arc_endpoints_x;
-    std::array<double, 4> arc_endpoints_y;
-    std::array<double, 4> arc_center_points_x;
-    std::array<double, 4> arc_center_points_y;
-    std::array<double, 4> arc_radii;
-    std::array<int, 4> arc_counterclockwise;
-    double XS[10];
-    double YS[10];
-};
-
 struct struct_internalpath {
     double startTurn;
     double endTurn;
@@ -72,12 +57,13 @@ struct struct_internalpath {
     std::array<double, 4> arc_startpoints_y;
     std::array<double, 4> arc_endpoints_x;
     std::array<double, 4> arc_endpoints_y;
+    std::array<double,4> arc_direction;
     std::vector<double> s;
     std::vector<double> a;
     std::vector<double> r;
-    std::vector<std::vector<double>> m;
+    std::vector<std::array<double,2>> m;
     std::vector<double> dis;
-    std::array<std::array<double,2>,5> lineVector; //This is used by discretize and getEnergy. Important: This is a unit vector!
+    std::array<std::array<double,2>,5> lineVector; //This is used by discretize and I want to reuse it in getEnergy and processpath. Important: This is a unit vector!
     std::array<double,5> lineLength;
 };
 
@@ -87,16 +73,6 @@ struct model_struct {
     double SA;
     double EA;
     double tolerance;
-    double xs_CS;
-    double ys_CS;
-    double A_is_CS;
-    double x_CS1;
-    double y_CS1;
-    double xt_CS;
-    double yt_CS;
-    double B_is_CS;
-    double x_CS2;
-    double y_CS2;
     double xs;
     double ys;
     double xt;
@@ -109,7 +85,6 @@ struct model_struct {
     std::vector<double> yobs_circ;
     std::vector<double> robs_circ;
     double nrEl;
-    double facV;
     double n;
     double lb;
     double ub;
@@ -117,21 +92,31 @@ struct model_struct {
     std::vector<turned_rectangle> blocked_area_down; //lower rectangles
     std::vector<turned_rectangle> blocked_area_left; //left rectangles
     std::vector<turned_rectangle> blocked_area_up; //upper rectangles
+    //double xs_CS; //all of these were used in the MATLAB implementation, but not here
+    //double ys_CS;
+    //double A_is_CS;
+    //double x_CS1;
+    //double y_CS1;
+    //double xt_CS;
+    //double yt_CS;
+    //double B_is_CS;
+    //double x_CS2;
+    //double y_CS2;
+    //double facV;
 };
 
 struct SMAsol_struct {
     float Violation;
     double L;
-    double L2;
+    //double L2;
     std::array<double,10> XS;
     std::array<double,10> YS;
     struct_internalpath internalpath;
     std::vector<float> xx;
     std::vector<float> yy;
-    // Add other members as needed
 };
 
-using arr2 = std::array<int, 2>; //This makes the code less bulky. Unsigned datatype prevents negative values of position and size.
+using arr2 = std::array<int, 2>; //This makes the code less bulky.
 
 //define RGB value
 struct RGBColor {
