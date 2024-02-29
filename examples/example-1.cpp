@@ -43,22 +43,23 @@ int main()
   //printModel(model);
 
   //declare empty struct for path
-  path_struct pathfromalg;
+  SMAsol_struct* sol = new SMAsol_struct;
   //run algorithm
-  bool k=mr_sma_alg(&model,&pathfromalg);//call main function
+  bool k=mr_sma_alg(&model,sol);//call main function
   //measure performance until here bcs the plot is not executed every time
   auto end = std::chrono::high_resolution_clock::now(); 
   std::chrono::duration<double> duration = end - start;
   if(k==0){
   //path processing
-    //printPathStruct(pathfromalg);
-    drawpathintosvg(pathfromalg, scale);
+    //printPathStruct(sol);
+    drawpathintosvg(sol, scale);
     double distance_betw_points = 1.6;
-    std::vector<point> pointcloud=pathtopointcloud(pathfromalg, distance_betw_points, model);
+    std::vector<point> pointcloud=pathtopointcloud(sol, distance_betw_points, model);
     drawpointcloud_svg(pointcloud, scale);
-    pathtocsv(pathfromalg);
+    pathtocsv(sol);
     //std::cout<<"Path processed successfully!"<<std::endl;
   } 
+  delete sol;
   std::cout << "Algorithm performance: " << duration.count() << " s\n";
     return 0;
 }
